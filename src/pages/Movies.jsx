@@ -2,46 +2,68 @@ import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { getSearchFilm } from 'components/helpers/filmApi';
 import MovieList from 'components/movieList/MovieList';
+import Loader from 'components/loader/Loader';
+import ErrorMessage from 'components/errorMessage/ErrorMessage';
+import constMessage from 'components/helpers/constMessage';
+import MoviesForm from 'components/moviesForm/MoviesForm';
 
 const Movies = () => {
   const [searchResult, setSearchResult] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useSearchParams();
   const query = searchQuery.get('query') ?? '';
 
-  function handleSubmitSearchQuery(event) {
-    event.preventDefault();
-    const form = event.currentTarget;
-
-    if (form.elements.saerchValue.value === '') {
+  function handleSubmitSearchQuery({ searchMovie }) {
+    if (searchMovie === '') {
+      setError(constMessage.emptyLine);
+      setSearchResult([]);
       return setSearchQuery({});
     }
 
-    setSearchQuery({ query: form.elements.saerchValue.value });
-    form.reset();
+    setSearchQuery({ query: searchMovie });
   }
 
   useEffect(() => {
     if (query === '') return;
+    setSearchResult([]);
+    const abortCtrl = new AbortController();
 
     async function searchFilm() {
-      const { results } = await getSearchFilm(query);
+      setIsLoading(true);
+      try {
+        const { results } = await getSearchFilm(query, abortCtrl);
 
-      setSearchResult([...results]);
+        if (!results.length) {
+          setError(constMessage.errorFetch);
+          return;
+        }
+
+        setSearchResult([...results]);
+        setError(null);
+      } catch (error) {
+        if (error.code !== 'ERR_CANCELED') {
+          setError(constMessage.errorFetch);
+        }
+      } finally {
+        setIsLoading(false);
+      }
     }
 
     searchFilm();
+
+    return () => {
+      abortCtrl.abort();
+    };
   }, [query]);
 
   return (
     <section>
-      <form onSubmit={handleSubmitSearchQuery}>
-        <label>
-          <input type="text" name="saerchValue"></input>
-          <button type="submit">Search</button>
-        </label>
-      </form>
+      <MoviesForm onSubmitForm={handleSubmitSearchQuery} />
 
-      <MovieList films={searchResult} />
+      {isError !== null && <ErrorMessage>{isError}</ErrorMessage>}
+      {isLoading && <Loader />}
+      {searchResult && <MovieList films={searchResult} />}
     </section>
   );
 };
