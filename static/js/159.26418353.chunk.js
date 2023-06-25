@@ -1,0 +1,2 @@
+"use strict";(self.webpackChunkgoit_react_hw_05_movies=self.webpackChunkgoit_react_hw_05_movies||[]).push([[159],{6159:function(t,n,o){o.r(n),o.d(n,{default:function(){return s}});var e,i=o(168),u=o(1109).Z.img(e||(e=(0,i.Z)(["\n  width: 100vw;\n  height: 100vh;\n  display: block;\n"]))),r=o(184),s=function(){return(0,r.jsx)(u,{src:"https://hostiq.ua/wiki/wp-content/uploads/2021/05/03-error-404-not-found-1.png",alt:"not-found"})}}}]);
+//# sourceMappingURL=159.26418353.chunk.js.map
