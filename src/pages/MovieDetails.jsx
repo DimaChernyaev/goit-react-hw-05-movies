@@ -11,7 +11,6 @@ import {
 import { BiSolidDoorOpen } from 'react-icons/bi';
 import Loader from 'components/loader/Loader';
 
-
 const MovieDetails = () => {
   const [currentFilm, setCurrentFilm] = useState({});
   const [isLoading, setIsLoading] = useState(false);
@@ -22,11 +21,11 @@ const MovieDetails = () => {
   const backLink = useRef(location.state?.from ?? '/');
 
   useEffect(() => {
-    const abortCtrl = new AbortController();
     setCurrentFilm({});
-    setIsLoading(true);
+    const abortCtrl = new AbortController();
 
     async function getFilm() {
+      setIsLoading(true);
       try {
         const film = await getCurrentFilms(movieId, abortCtrl);
 
@@ -45,7 +44,6 @@ const MovieDetails = () => {
         setIsLoading(false);
       }
     }
-
     getFilm();
 
     return () => {
@@ -53,13 +51,11 @@ const MovieDetails = () => {
     };
   }, [movieId]);
 
-  console.log(isLoading);
-
   return (
     <>
       {isError !== null && <ErrorMessage>{isError}</ErrorMessage>}
       {isLoading && <Loader />}
-      {currentFilm && (
+      {currentFilm !== {} && (
         <Section>
           <ButtonBack to={backLink.current}>
             <BiSolidDoorOpen size={20} /> Go back

@@ -12,3 +12,9 @@ export const GenresItem = styled.li`
   border: 1px solid black;
   border-radius: 8px;
 `;
+
+export const TextEmpty = styled.p`
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: black;
+`;

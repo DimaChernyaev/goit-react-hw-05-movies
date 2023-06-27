@@ -1,13 +1,18 @@
-import { GenresList, GenresItem } from './GeneresList.styled';
+import { GenresList, GenresItem, TextEmpty } from './GeneresList.styled';
+import constEmpty from 'components/helpers/constEmpty';
 
 const GeneresList = ({ genres }) => {
   return (
     <GenresList>
-      {genres ? genres.map(({ id, name }) => (
-        <GenresItem key={id}>
-          <p>{name}</p>
-        </GenresItem>
-      )) : 'Loading...'}
+      {genres.length ? (
+        genres.map(({ id, name }) => (
+          <GenresItem key={id}>
+            <p>{name}</p>
+          </GenresItem>
+        ))
+      ) : (
+        <TextEmpty>{constEmpty.emptyGenres}</TextEmpty>
+      )}
     </GenresList>
   );
 };
