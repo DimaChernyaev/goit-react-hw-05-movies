@@ -7,10 +7,15 @@ export const SearchForm = styled(Form)`
 
 export const Input = styled(Field)`
   padding: 5px 15px;
-  border-color: #ffd723;
+  border: 2px solid #ffd723;
   border-radius: 8px;
   width: 400px;
   font-size: 18px;
+
+  &:focus {
+    outline: none;
+    border-color: black;
+  }
 `;
 
 export const Label = styled.label`
